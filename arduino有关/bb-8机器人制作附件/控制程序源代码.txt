@@ -1,0 +1,106 @@
+#include <Servo.h>
+#define ENA 3
+#define IN1 2
+#define IN2 4
+#define ENB 5
+#define IN3 6
+#define IN4 7
+#define sensor A0
+Servo myservo;
+char c=0;//蓝牙接受的变量
+int v=150,v0=0;//默认初始速度
+int angle=90;//舵机初始角度
+float i;//测量电压
+void pint()
+{
+  pinMode(ENA,OUTPUT);
+  pinMode(IN1,OUTPUT);
+  pinMode(IN2,OUTPUT);
+  pinMode(ENB,OUTPUT);
+  pinMode(IN3,OUTPUT);
+  pinMode(IN4,OUTPUT);
+  pinMode(sensor,INPUT);
+  myservo.attach(9);
+}
+void mys(int angle1)//舵机角度控制
+{
+  int angle0=myservo.read();
+  if(myservo.read()<angle1)
+  {while(myservo.read()<angle1){myservo.write(angle0++);delay(20);}}
+  else
+  {while(myservo.read()>angle1){myservo.write(angle0--);delay(20);}}
+}
+void motor(int vL,int vR)//120~255马达控制
+{
+ if(vL>=0 && vR>=0) 
+ {analogWrite(ENA,vR);digitalWrite(IN1,0);digitalWrite(IN2,1);
+  analogWrite(ENB,vL);digitalWrite(IN3,0);digitalWrite(IN4,1);}
+ else if(vL>0 && vR<0)
+ {analogWrite(ENA,(-vR));digitalWrite(IN1,1);digitalWrite(IN2,0);
+  analogWrite(ENB,vL);digitalWrite(IN3,0);digitalWrite(IN4,1);}
+ else if(vL<0 && vR>0)
+ {analogWrite(ENA,vR);digitalWrite(IN1,0);digitalWrite(IN2,1);
+  analogWrite(ENB,(-vL));digitalWrite(IN3,1);digitalWrite(IN4,0);}
+ else
+ {analogWrite(ENA,(-vR));digitalWrite(IN1,1);digitalWrite(IN2,0);
+  analogWrite(ENB,(-vL));digitalWrite(IN3,1);digitalWrite(IN4,0);}
+}
+void setup()
+{
+  Serial.begin(9600); 
+  pint();
+  myservo.write(angle);
+}
+void loop()
+{
+  if (Serial.available())
+  {c=Serial.read();}//将蓝牙信号赋值给c
+  else if(c=='v')//检测电压
+  {
+  i=analogRead(sensor)*5;i=i/1024*3;
+  Serial.print("The voltage is:");
+  Serial.print(i); //可以观察读取的模拟量——电压值
+  Serial.println("V");
+  c='t';
+  }
+  else if(c=='h'){v=240;c='t';}//高速模式
+  else if(c=='l'){v=160;c='t';}//中速模式
+  else if(c=='1')  //前进
+  {
+    v0=80;
+    mys(110);
+    while(c=='1')
+    {
+      if (Serial.available()){c=Serial.read();}
+      else if(v0<v){v0++;delay(10);motor(v0,v0);}//匀加速
+      else{motor(v,v);}
+    }
+    while(v0>80){v0--;delay(11);motor(v0,v0);}  //匀减速
+    mys(90);
+    //motor(0,0);delay(500);motor(v,v);delay(500);
+    //while(1){motor(100,-100);delay(2000);break;}
+  }
+  else if(c=='2') {motor(-v,v);}//右转
+  else if(c=='3') {motor(v,-v);}//左转
+  else if(c=='4') //后退
+  {
+    v0=80;
+    mys(70);
+    while(c=='4')
+    {
+      if (Serial.available()){c=Serial.read();}
+      else if(v0<v){v0++;delay(10);motor(-v0,-v0);}
+      else{motor(-v,-v);}
+    }
+    while(v0>80){v0--;delay(11);motor(-v0,-v0);}
+    mys(90);
+    //motor(0,0);delay(500);motor(-v,-v);delay(500);
+    //while(1){motor(-100,100);delay(2000);break;}
+  }
+  else if(c=='5'&& angle<150){angle++;myservo.write(angle);delay(20);}//舵机角度增加
+  else if(c=='6'&& angle>40){angle--;myservo.write(angle);delay(20);}//舵机角度减少
+  else if(c=='7'){mys(90);}
+  else if(c=='8'){motor(v-60,v);}
+  else if(c=='9'){motor(v,v-60);}
+  else {motor(0,0);}
+}

@@ -1,0 +1,38 @@
+Partlist
+
+Exported from plen_headboard.sch at 2015/9/23 ÐÇÆÚÈý 16:12
+
+EAGLE Version 7.3.0 Copyright (c) 1988-2015 CadSoft
+
+Assembly variant: 
+
+Part     Value           Device          Package     Library        Sheet
+
+C1       1u              C-EUC0603       C0603       rcl            1
+C2       0.1u            C-EUC0603       C0603       rcl            1
+C3       0.1u            C-EUC0603       C0603       rcl            1
+C4       1u              C-EUC0603       C0603       rcl            1
+C5       0.1u            C-EUC0603       C0603       rcl            1
+C6       0.1u            C-EUC0603       C0603       rcl            1
+CN2      CON-02          CON-02          SIP-100-02  con-headers-jp 1
+CN3      CON-02          CON-02          SIP-100-02  con-headers-jp 1
+CN5                      5PINZH          ZH-5        con-jst        1
+IC1      MAX34SHORT      MAX34SHORT      SO08SHORT   maxim          1
+PROG     CONN_5-2-FTSH-V CONN_5-2-FTSH-V FTSH-105-DV pel_misc       1
+Q1       BC817-40LT1SMD  BC817-40LT1SMD  SOT23-BEC   transistor-npn 1
+Q2       BC817-40LT1SMD  BC817-40LT1SMD  SOT23-BEC   transistor-npn 1
+R1       10k             R-US_R0603      R0603       rcl            1
+R2       10k             R-US_R0603      R0603       rcl            1
+R4       100             R-US_R0603      R0603       rcl            1
+R5                       R-US_R0603      R0603       rcl            1
+R6                       R-US_R0603      R0603       rcl            1
+R7                       R-US_R0603      R0603       rcl            1
+R8                       R-US_R0603      R0603       rcl            1
+S1                       31-XX           B3F-31XX    switch-omron   1
+SJ1      TERM            SJ              SJ          jumper         1
+SJ2      SJ-ON           SJ-ON           SJ-ON       jumper         1
+SJ3      SJ-ON           SJ-ON           SJ-ON       jumper         1
+SJ4      SJ_2-ON         SJ_2-ON         SJ_2-ON     jumper         1
+SJ5                      SJ              SJ          jumper         1
+U1       BLE113-VISUAL-A BLE113-VISUAL-A BLE113-A    sf-bluegiga    1
+U3       MPU-6050-1      MPU-6050-1      QFN-24-4MM2 Testing        1
